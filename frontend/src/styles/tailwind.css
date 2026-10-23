@@ -1,0 +1,95 @@
+@import 'tailwindcss';
+
+/*
+ * Tailwind CSS v4 — theme tokens declared inside @theme
+ * Ref: https://tailwindcss.com/docs/theme
+ */
+@theme {
+  /* 品牌主色 - 深海蓝(对应登录页深蓝渐变) */
+  --color-brand-50: #eef4ff;
+  --color-brand-100: #d9e6ff;
+  --color-brand-200: #bcd3ff;
+  --color-brand-300: #8eb7ff;
+  --color-brand-400: #5990fc;
+  --color-brand-500: #3b82f6;
+  --color-brand-600: #2563eb;
+  --color-brand-700: #1d4ed8;
+  --color-brand-800: #1e3a8a;
+  --color-brand-900: #1e293b;
+  --color-brand-950: #0f172a;
+
+  /* 强调色 - 暖金(图书馆典雅) */
+  --color-gold-400: #f5c542;
+  --color-gold-500: #d4a427;
+  --color-gold-600: #b8861f;
+
+  /* 字体 */
+  --font-sans: 'Inter', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --font-serif: 'Source Han Serif SC', 'Noto Serif SC', Georgia, serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+
+  /* 圆角 */
+  --radius-card: 16px;
+
+  /* 动画 */
+  --animate-fade-in: fade-in 0.5s ease-out both;
+  --animate-rise: rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* 全局基础样式覆盖(配合 Element Plus) */
+@layer base {
+  html,
+  body,
+  #app {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: var(--font-sans);
+    /* 统一走 CSS 变量, 亮/暗主题由 html.dark 上的变量决定 */
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    transition:
+      background-color 0.28s ease,
+      color 0.28s ease;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover);
+  }
+}

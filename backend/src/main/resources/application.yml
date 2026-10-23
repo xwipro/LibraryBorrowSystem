@@ -1,0 +1,86 @@
+# ============================================
+# 图书管理系统 2026 - 后端配置
+# 技术栈: Spring Boot 4 + MyBatis-Plus + PostgreSQL(Neon) + Redis + JWT
+# ============================================
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: library-backend
+  # ---- PostgreSQL (Neon 云库, 仅操作 Library 库) ----
+  datasource:
+    url: jdbc:postgresql://ep-holy-sunset-b3zt3lfg-pooler.c-4.ap-southeast-1.aws.neon.tech:5432/Library?sslmode=require&channel_binding=require&prepareThreshold=0
+    username: neondb_owner
+    password: npg_fnyP8Qzsr0gI
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 1
+      connection-timeout: 15000
+  # ---- Redis (本地, 存验证码/token黑名单/临时参数) ----
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: uG9iD1cN2uE7qS5kF1cN1uN4qJ4wQ3gS
+      timeout: 5s
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+  # ---- 数据库初始化: 已关闭, 表结构/数据由用户自行导入管理 ----
+  sql:
+    init:
+      mode: never
+      schema-locations: classpath:db/schema.sql
+      continue-on-error: false
+  # ---- 邮件 (找回密码验证码; SMTP 后续替换为正式服务, 先占位) ----
+  mail:
+    host: smtp.example.com
+    port: 465
+    username: placeholder@example.com
+    password: placeholder
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+  global-config:
+    banner: false
+    db-config:
+      id-type: auto
+
+# ---- JWT ----
+jwt:
+  # HS256 密钥(>=256bit), 生产环境务必通过环境变量覆盖
+  secret: lY7kP2mN9xQ4wR8tZ6cV3bH1jF5dG7aU0eS4iK8oM2pL9nX3qR6sT5vW7yJ4bD8cA1
+  # token 默认过期时间: 12 小时
+  expire-hours: 12
+
+# ---- 业务参数 ----
+app:
+  # 验证码有效期(秒)
+  captcha-expire-seconds: 300
+  # 找回密码验证码有效期(秒)
+  forgot-expire-seconds: 300
+  # 邮件发件人
+  mail-from: no-reply@library.com
+  # 借阅周期(天)
+  borrow-days: 30
+  # 预约过期(天)
+  reservation-expire-days: 7
+
+logging:
+  level:
+    com.library: info

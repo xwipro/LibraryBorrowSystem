@@ -1,0 +1,281 @@
+// ============================================
+// 主样式入口 - 在 main.ts 中导入
+// 顺序: Tailwind -> 变量 -> 主题 CSS 变量 -> 业务样式 -> dark 覆盖
+// ============================================
+
+@use './tailwind.css';
+@use './variables.scss' as *;
+@use './transitions.scss';
+
+// ============================================
+// 全局 CSS 变量 - 基于 PROJECT2026 品牌色
+// 业务代码用 var(--bg-page) 替代硬编码
+// ============================================
+:root {
+  // 品牌色(亮暗模式一致)
+  --brand-primary: #2563eb;
+  --brand-primary-dark: #1e3a8a;
+  --brand-primary-light: #3b82f6;
+  --brand-accent: #d4a427;
+  // 功能色(暗色模式在下方覆盖, 供 var(--color-*) 使用)
+  --color-success: #16a34a;
+  --color-warning: #f59e0b;
+  --color-danger: #dc2626;
+  --color-info: #6b7280;
+
+  // 亮色模式
+  --text-primary: #1f2937;
+  --text-regular: #4b5563;
+  --text-secondary: #6b7280;
+  --text-placeholder: #9ca3af;
+  --border-base: #e5e7eb;
+  --border-light: #f3f4f6;
+  --bg-page: #f5f7fb;
+  --bg-card: #ffffff;
+  --bg-sidebar: #0f172a;
+  --bg-topbar: #ffffff;
+  --bg-hover: rgba(15, 23, 42, 0.04);
+  // 输入类控件底色(需要与卡片底色区分时使用)
+  --bg-input: #ffffff;
+  // 半透明背景: 顶栏毛玻璃 / 细微分隔线 / 浅色渐变块
+  --bg-nav: rgba(255, 255, 255, 0.85);
+  --border-soft: rgba(15, 23, 42, 0.06);
+  --bg-gradient-page: linear-gradient(180deg, #f8fafc 0%, #eef4ff 100%);
+  --bg-gradient-card: linear-gradient(135deg, #f8fafc, #eef4ff);
+  // 品牌渐变(深 -> 浅), 用于渐变文字/图标
+  --brand-gradient: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+  // 链接/强调文字用品牌色(暗色下需要提亮, 故单独收敛为变量)
+  --brand-link: #2563eb;
+  // 头像占位背景/文字(亮色: 品牌亮蓝渐变+白字, 与主题协调不沉闷)
+  --avatar-bg: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
+  --avatar-color: #ffffff;
+  // 滚动条
+  --scrollbar-thumb: rgba(15, 23, 42, 0.2);
+  --scrollbar-thumb-hover: rgba(15, 23, 42, 0.35);
+  --shadow-card: 0 4px 20px rgba(15, 23, 42, 0.06);
+  --shadow-hover: 0 8px 28px rgba(15, 23, 42, 0.12);
+  --shadow-sidebar: 4px 0 24px rgba(15, 23, 42, 0.08);
+}
+
+// ============================================
+// 暗色模式覆盖 - 遵循 PROJECT2026 深蓝品牌调性
+// ============================================
+html.dark,
+html[data-theme='dark'] {
+  // 功能色(暗色下提亮)
+  --color-success: #4ade80;
+  --color-warning: #f5c542;
+  --color-danger: #f87171;
+  --color-info: #94a3b8;
+  --text-primary: #f1f5f9;
+  --text-regular: #cbd5e1;
+  --text-secondary: #94a3b8;
+  --text-placeholder: #64748b;
+  --border-base: #334155;
+  --border-light: #1e293b;
+  --bg-page: #0b1220;
+  --bg-card: #1e293b;
+  --bg-sidebar: #070d1a;
+  --bg-topbar: #1e293b;
+  --bg-hover: rgba(255, 255, 255, 0.06);
+  // 暗色下输入类控件用比卡片更深的底色, 保证在卡片上可辨识
+  --bg-input: #0b1220;
+  --bg-nav: rgba(30, 41, 59, 0.85);
+  --border-soft: rgba(255, 255, 255, 0.08);
+  --bg-gradient-page: linear-gradient(180deg, #0b1220 0%, #0f172a 100%);
+  --bg-gradient-card: linear-gradient(135deg, #1e293b, #172554);
+  --brand-gradient: linear-gradient(135deg, #93c5fd 0%, #60a5fa 100%);
+  --brand-link: #60a5fa;
+  // 头像占位背景/文字(暗色: 深灰蓝渐变+浅灰字, 暗色头像为暗色)
+  --avatar-bg: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+  --avatar-color: #cbd5e1;
+  --scrollbar-thumb: rgba(255, 255, 255, 0.18);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.32);
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.3);
+  --shadow-hover: 0 8px 28px rgba(0, 0, 0, 0.4);
+  --shadow-sidebar: 4px 0 24px rgba(0, 0, 0, 0.45);
+}
+
+// ============================================
+// Element Plus 主题色 - 跟随界面明暗:
+// 亮色主题 primary 用浅蓝 #3b82f6, 暗色主题 primary 用深蓝 #1d4ed8
+// 亮浅暗深, 避免亮色下主色发闷、暗色下主色刺眼
+// ============================================
+:root {
+  --el-color-primary: #3b82f6;
+  --el-color-primary-light-3: #60a5fa;
+  --el-color-primary-light-5: #93c5fd;
+  --el-color-primary-light-7: #bfdbfe;
+  --el-color-primary-light-8: #dbeafe;
+  --el-color-primary-light-9: #eff6ff;
+  --el-color-primary-dark-2: #2563eb;
+}
+
+// 暗色下: 主色加深为 #1d4ed8; hover/选中用比主色亮的蓝(深底上可辨识), 淡底用深蓝黑
+html.dark,
+html[data-theme='dark'] {
+  --el-color-primary: #1d4ed8;
+  --el-color-primary-light-3: #3b82f6;
+  --el-color-primary-light-5: #2563eb;
+  --el-color-primary-light-7: #1e3a8a;
+  --el-color-primary-light-8: #172554;
+  --el-color-primary-light-9: #0f1f4d;
+  --el-color-primary-dark-2: #60a5fa;
+}
+
+// ============================================
+// 业务通用样式 - 用 CSS 变量替代 SCSS 静态变量
+// ============================================
+
+// 页面容器
+.page-container {
+  @apply p-6;
+}
+
+// 卡片
+.card {
+  background: var(--bg-card);
+  border-radius: $radius-lg;
+  padding: 24px;
+  transition:
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+}
+
+// 页面标题
+.page-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 20px;
+}
+
+// 工具类: 渐变文字
+.text-gradient-brand {
+  background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-primary-light) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+// 头像占位背景跟随主题: 亮色=浅灰渐变深灰字, 暗色=深灰渐变浅灰字
+.theme-avatar {
+  background: var(--avatar-bg) !important;
+  color: var(--avatar-color) !important;
+  font-weight: 600;
+  border: none !important;
+}
+
+// Element Plus 按钮微调
+.el-button {
+  font-weight: 500;
+}
+
+// 全局隐藏滚动条(用户要求): 滚动功能保留, 仅不显示
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+*::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+// ============================================
+// Element Plus 暗色模式深度覆盖
+// ============================================
+html.dark {
+  .el-card,
+  .el-dialog,
+  .el-drawer,
+  .el-message-box {
+    background-color: var(--bg-card) !important;
+    border-color: var(--border-base) !important;
+  }
+
+  .el-card__header {
+    border-bottom-color: var(--border-base) !important;
+  }
+
+  .el-table {
+    --el-table-bg-color: var(--bg-card);
+    --el-table-tr-bg-color: var(--bg-card);
+    --el-table-header-bg-color: var(--bg-hover);
+    --el-table-row-hover-bg-color: var(--bg-hover);
+    --el-table-border-color: var(--border-base);
+    --el-table-text-color: var(--text-primary);
+    --el-table-header-text-color: var(--text-secondary);
+  }
+
+  .el-input__wrapper,
+  .el-textarea__inner,
+  .el-select__wrapper {
+    background-color: var(--bg-page) !important;
+    box-shadow: 0 0 0 1px var(--border-base) inset !important;
+  }
+
+  .el-input__wrapper.is-focus,
+  .el-select__wrapper.is-focused {
+    box-shadow: 0 0 0 1px var(--brand-primary) inset !important;
+  }
+
+  .el-popper.is-light {
+    background: var(--bg-card) !important;
+    border-color: var(--border-base) !important;
+    color: var(--text-primary);
+  }
+
+  .el-dropdown-menu {
+    background: var(--bg-card) !important;
+    border-color: var(--border-base) !important;
+
+    .el-dropdown-menu__item {
+      color: var(--text-primary);
+
+      &:hover {
+        background: var(--bg-hover);
+      }
+    }
+  }
+
+  .el-breadcrumb__inner {
+    color: var(--text-secondary) !important;
+
+    &.is-link {
+      color: var(--brand-primary-light) !important;
+    }
+  }
+
+  .el-tag {
+    background-color: var(--bg-hover) !important;
+  }
+
+  .el-divider {
+    border-color: var(--border-base) !important;
+  }
+
+  .el-descriptions__label {
+    color: var(--text-secondary) !important;
+  }
+
+  .el-avatar {
+    background-color: var(--bg-hover) !important;
+    color: var(--text-primary);
+  }
+}
+
+// ============================================
+// 表格圆角与滚动条隐藏 (用户要求: 全局不显示滚动条)
+// ============================================
+
+// el-table 整体圆角: 表头灰底不再直角突兀, 与卡片圆角一致
+.el-table {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+// el-table 内部自绘滚动条一并隐藏(滚动功能保留)
+.el-scrollbar__bar {
+  display: none !important;
+}

@@ -1,0 +1,33 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+node_modules
+.DS_Store
+dist
+dist-ssr
+coverage
+*.local
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.user
+*.userosscache
+*.sln
+*.sw?
+
+# Vite temp
+.vite
+node_modules/.tmp
+.eslintcache
+
+# Env
+.env.local
+.env.*.local

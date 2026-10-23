@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="图书管理系统 2026 - 现代化图书馆服务平台" />
+    <title>图书管理系统 2026</title>
+    <script>
+      // 首屏主题预置: 在样式与应用挂载前同步写入 html 上的主题标记,
+      // 避免暗色模式用户看到一帧白屏(闪烁)。读取的是 pinia 持久化在 localStorage 的 app store。
+      ;(function () {
+        try {
+          var resolved = 'light'
+          var raw = localStorage.getItem('app')
+          if (raw) {
+            var saved = JSON.parse(raw)
+            var mode = saved && saved.themeMode
+            if (mode === 'dark' || mode === 'light') {
+              resolved = mode
+            } else if (mode === 'system') {
+              resolved = window.matchMedia('(prefers-color-scheme: dark)').matches
+                ? 'dark'
+                : 'light'
+            }
+          }
+          var root = document.documentElement
+          if (resolved === 'dark') {
+            root.classList.add('dark')
+            root.setAttribute('data-theme', 'dark')
+          } else {
+            root.setAttribute('data-theme', 'light')
+          }
+          root.style.colorScheme = resolved
+        } catch (e) {
+          /* 读取失败时按亮色渲染, 应用启动后会再同步一次 */
+        }
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+package com.library.mapper;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.library.entity.Announcement;
+import org.apache.ibatis.annotations.Mapper;
+
+/**
+ * Announcement Mapper
+ */
+@Mapper
+public interface AnnouncementMapper extends BaseMapper<Announcement> {
+}
